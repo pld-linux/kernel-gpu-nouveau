@@ -11,10 +11,10 @@ Version:	20090914
 Release:	%{_rel}
 License:	GPL v2
 Group:		Base/Kernel
-Source0:	http://people.freedesktop.org/~pq/nouveau-drm/master-compat.tar.gz
-# Source0-md5:	fac93ec94208d2076abf4ede05a0251c
+Source0:	http://people.freedesktop.org/~pq/nouveau-drm/master.tar.gz
+# Source0-md5:	058a603a4e6915a47db0ed9f7bdb4061
 URL:		http://nouveau.freedesktop.org/wiki/InstallDRM
-%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.30}
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.31}
 BuildRequires:	rpmbuild(macros) >= 1.379
 Requires(post,postun):	/sbin/depmod
 %if %{with dist_kernel}
@@ -48,14 +48,15 @@ DRM (Direct Rendering Manager) to moduł jądra Linuksa dający
 bezpośredni dostęp do sprzętu klientom DRI.
 
 %prep
-%setup -q -n master-compat
+%setup -q -n master
 
 %build
 TOPDIR=$(pwd)
 cd drivers/gpu/drm
-%build_kernel_modules -m drm,nouveau/nouveau,ttm/ttm \
+%build_kernel_modules -m drm,drm_kms_helper,nouveau/nouveau,ttm/ttm \
 	CONFIG_DRM=m \
 	CONFIG_DRM_TTM=m \
+	CONFIG_DRM_KMS_HELPER=m \
 	CONFIG_DRM_NOUVEAU=m \
 	CONFIG_DRM_NOUVEAU_KMS=n \
 	CONFIG_DRM_NOUVEAU_BACKLIGHT=y \
@@ -76,6 +77,7 @@ rm -rf $RPM_BUILD_ROOT
 
 cd drivers/gpu/drm
 %install_kernel_modules -m drm -d kernel/drivers/gpu/drm
+%install_kernel_modules -m drm_kms_helper -d kernel/drivers/gpu/drm
 %install_kernel_modules -m nouveau/nouveau -d kernel/drivers/gpu/drm
 %install_kernel_modules -m ttm/ttm -d kernel/drivers/gpu/drm
 

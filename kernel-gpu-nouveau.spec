@@ -7,12 +7,12 @@
 Summary:	Linux driver for DRM
 Summary(pl.UTF-8):	Sterownik dla Linuksa do DRM
 Name:		kernel%{_alt_kernel}-gpu-nouveau
-Version:	20091012
+Version:	20091018
 Release:	%{_rel}
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://people.freedesktop.org/~pq/nouveau-drm/master.tar.gz
-# Source0-md5:	e71a628cdeb409aaf3562ddabae805d3
+# Source0-md5:	e641a9d91f26d47d19c110f5eb94be62
 URL:		http://nouveau.freedesktop.org/wiki/InstallDRM
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.31}
 BuildRequires:	rpmbuild(macros) >= 1.379

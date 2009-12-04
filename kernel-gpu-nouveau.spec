@@ -54,7 +54,7 @@ bezpośredni dostęp do sprzętu klientom DRI.
 TOPDIR=$(pwd)
 cd drivers/gpu/drm
 %build_kernel_modules -m drm,drm_kms_helper,nouveau/nouveau,ttm/ttm \
-	CONFIG_ACPI=m \
+	CONFIG_ACPI=y \
 	CONFIG_DRM=m \
 	CONFIG_DRM_TTM=m \
 	CONFIG_DRM_KMS_HELPER=m \

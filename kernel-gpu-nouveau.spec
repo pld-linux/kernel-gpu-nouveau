@@ -7,14 +7,16 @@
 Summary:	Linux driver for DRM
 Summary(pl.UTF-8):	Sterownik dla Linuksa do DRM
 Name:		kernel%{_alt_kernel}-gpu-nouveau
-Version:	20091203
+Version:	20091215
 Release:	%{_rel}
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://people.freedesktop.org/~pq/nouveau-drm/master.tar.gz
-# Source0-md5:	c16b18fe85b84641e3ffcac531caac6e
+# Source0-md5:	ac938a4006c9bdcb42148769d49890c7
+Source1:	http://people.freedesktop.org/~pq/nouveau-drm/nouveau-firmware-20091212.tar.gz
+# Source1-md5:	518ce9f432498969c88f63579032da74
 URL:		http://nouveau.freedesktop.org/wiki/InstallDRM
-%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.31}
+%{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.32}
 BuildRequires:	rpmbuild(macros) >= 1.379
 Requires(post,postun):	/sbin/depmod
 %if %{with dist_kernel}
@@ -48,7 +50,7 @@ DRM (Direct Rendering Manager) to moduł jądra Linuksa dający
 bezpośredni dostęp do sprzętu klientom DRI.
 
 %prep
-%setup -q -n master
+%setup -q -n master -a 1
 
 %build
 TOPDIR=$(pwd)
@@ -81,6 +83,9 @@ cd drivers/gpu/drm
 %install_kernel_modules -m drm_kms_helper -d kernel/drivers/gpu/drm
 %install_kernel_modules -m nouveau/nouveau -d kernel/drivers/gpu/drm
 %install_kernel_modules -m ttm/ttm -d kernel/drivers/gpu/drm
+cd ../../..
+install -d $RPM_BUILD_ROOT/lib/firmware/nouveau
+install nouveau/* $RPM_BUILD_ROOT/lib/firmware/nouveau
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -94,3 +99,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n kernel%{_alt_kernel}-gpu-drm-nouveau
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/kernel/drivers/gpu
+%dir /lib/firmware/nouveau
+/lib/firmware/nouveau/*.ctxprog
+/lib/firmware/nouveau/*.ctxvals

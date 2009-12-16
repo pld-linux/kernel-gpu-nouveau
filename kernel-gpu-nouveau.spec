@@ -13,8 +13,6 @@ License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://people.freedesktop.org/~pq/nouveau-drm/master.tar.gz
 # Source0-md5:	ac938a4006c9bdcb42148769d49890c7
-Source1:	http://people.freedesktop.org/~pq/nouveau-drm/nouveau-firmware-20091212.tar.gz
-# Source1-md5:	518ce9f432498969c88f63579032da74
 URL:		http://nouveau.freedesktop.org/wiki/InstallDRM
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.32}
 BuildRequires:	rpmbuild(macros) >= 1.379
@@ -25,6 +23,7 @@ Requires(postun):	%releq_kernel
 Obsoletes:	kernel-drm = %{_kernel_ver_str}
 Conflicts:	kernel-drm = %{_kernel_ver_str}
 %endif
+Requires:	nouveau-firmware
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -50,7 +49,7 @@ DRM (Direct Rendering Manager) to moduł jądra Linuksa dający
 bezpośredni dostęp do sprzętu klientom DRI.
 
 %prep
-%setup -q -n master -a 1
+%setup -q -n master
 
 %build
 TOPDIR=$(pwd)
@@ -84,8 +83,6 @@ cd drivers/gpu/drm
 %install_kernel_modules -m nouveau/nouveau -d kernel/drivers/gpu/drm
 %install_kernel_modules -m ttm/ttm -d kernel/drivers/gpu/drm
 cd ../../..
-install -d $RPM_BUILD_ROOT/lib/firmware/nouveau
-install nouveau/* $RPM_BUILD_ROOT/lib/firmware/nouveau
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -99,6 +96,3 @@ rm -rf $RPM_BUILD_ROOT
 %files -n kernel%{_alt_kernel}-gpu-drm-nouveau
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/kernel/drivers/gpu
-%dir /lib/firmware/nouveau
-/lib/firmware/nouveau/*.ctxprog
-/lib/firmware/nouveau/*.ctxvals
